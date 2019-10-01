@@ -3,11 +3,13 @@ import { NgModule } from '@angular/core';
 
 
 import { AppComponent } from './app.component';
+import { CounterInputComponent } from './counter-input/counter-input.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CounterInputComponent
   ],
   imports: [
     BrowserModule
