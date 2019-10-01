@@ -1,5 +1,6 @@
-import {Component, forwardRef, Input} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {Component, forwardRef, Input, OnChanges} from '@angular/core';
+import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {createCounterRangeValidator} from '../validator/counter-input';
 
 @Component({
 	selector: 'app-counter-input',
@@ -10,13 +11,26 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 			provide: NG_VALUE_ACCESSOR,
 			useExisting: forwardRef(() => CounterInputComponent),
 			multi: true
+		},
+		{
+			provide: NG_VALIDATORS,
+			useExisting: forwardRef(() => CounterInputComponent),
+			multi: true
 		}
 	]
 })
-export class CounterInputComponent implements ControlValueAccessor {
+export class CounterInputComponent implements ControlValueAccessor, OnChanges {
 
 	@Input()
 	_counterValue = 0;
+
+	@Input()
+	counterRangeMax;
+
+	@Input()
+	counterRangeMin;
+
+	validateFn: Function;
 
 	constructor() { }
 
@@ -58,5 +72,16 @@ export class CounterInputComponent implements ControlValueAccessor {
 		if (value !== undefined) {
 			this.counterValue = value;
 		}
+	}
+
+	/**
+	 * Angular uses this method to perform validation
+	 */
+	validate(c: FormControl) {
+		return this.validateFn(c);
+	}
+
+	ngOnChanges(changes): void {
+		this.validateFn = createCounterRangeValidator(this.counterRangeMax, this.counterRangeMin);
 	}
 }

@@ -1,5 +1,19 @@
-<form [formGroup]="form">
-	<app-counter-input formControlName="counter"></app-counter-input>
+<form [formGroup]="form" (submit)=onSubmit()>
+	<app-counter-input
+			formControlName="counter"
+			[counterRangeMax]="maxValue"
+			[counterRangeMin]="minValue">
+	</app-counter-input>
+
+	<div>
+		<button type="submit" [disabled]="!form.valid">Submit</button>
+	</div>
+
 </form>
+
+<div *ngIf="!form.valid">
+	Counter is invalid!
+	<pre>{{form.get('counter').errors | json}}</pre>
+</div>
 
 <pre>{{form.value | json}}</pre>
