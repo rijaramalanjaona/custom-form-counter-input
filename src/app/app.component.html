@@ -1,1 +1,5 @@
-<app-counter-input></app-counter-input>
+<form [formGroup]="form">
+	<app-counter-input formControlName="counter"></app-counter-input>
+</form>
+
+<pre>{{form.value | json}}</pre>
